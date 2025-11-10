@@ -2,9 +2,20 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
+
 // Auto-wikilink plugin + tags map
 import { remarkAutoLinkTerms } from './src/markdown/remark-auto-link-terms.js';
-import { WIKI_TERMS } from './src/data/wiki-terms.js';
+import fs from 'node:fs/promises';
+
+let WIKI_TERMS = {};
+try {
+  WIKI_TERMS = JSON.parse(
+    await fs.readFile(new URL('./src/data/wiki-terms.json', import.meta.url), 'utf-8')
+  );
+} catch (err) {
+  console.warn('[astro.config] wiki-terms.json missing; using empty map');
+}
+
 
 export default defineConfig({
   // Redirects
