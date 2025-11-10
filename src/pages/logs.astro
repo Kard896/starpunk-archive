@@ -1,0 +1,18 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { getCollection } from 'astro:content';
+
+const docs = await getCollection('docs', (e) => e.slug?.startsWith('luna/'));
+
+const items = docs
+  .map((e) => ({ title: e.data.title ?? e.id, url: `/${e.slug}/` }))
+  .sort((a, b) => a.title.localeCompare(b.title));
+---
+
+<StarlightPage frontmatter={{ title: "Luna’s Exploration Log" }}>
+  <h1>Exploration Archives</h1>
+  <ul>
+    {items.map((it) => <li><a href={it.url}>{it.title}</a></li>)}
+  </ul>
+</StarlightPage>
+
